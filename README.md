@@ -8,5 +8,6 @@
 pip install trello-python
 ```
 ## Usage
-```
+```python
 client = Client()
+```
