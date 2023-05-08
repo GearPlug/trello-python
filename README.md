@@ -3,7 +3,7 @@
 ![](https://img.shields.io/badge/version-0.1.0-success) ![](https://img.shields.io/badge/Python-3.8%20|%203.9%20|%203.10%20|%203.11-4B8BBE?logo=python&logoColor=white)  
 
 *trello-python* is an API wrapper for Trello, written in Python.  
-This product uses Oauth2 for authentication and notifications using webhooks.
+This library uses Oauth2 for authentication and notifications using webhooks.
 ## Installing
 ```
 pip install trello-python
@@ -55,7 +55,7 @@ cards = client.get_cards(board_id)
 # cards = Valid values: all, closed, none, open  
 # filter = Valid values: all, closed, none, open  
 # fields = all or a comma-separated list of list fields
-lists = client.get_board_lists(board_id)
+lists = client.get_board_lists(board_id, cards=None, filter=None, fields=None)
 ```
 #### - List board labels
 ```python

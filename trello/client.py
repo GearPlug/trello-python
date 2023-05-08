@@ -14,8 +14,8 @@ class Client(object):
         self.key = api_key
         self.token = token
 
-    def authorization_url(self, return_url=None, state=None):
-        if state and return_url:
+    def authorization_url(self, return_url, state=None):
+        if state:
             return_url = f"{return_url}?state={state}"
         params = {
             "expiration": "never",
