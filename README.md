@@ -107,3 +107,16 @@ checklists = client.get_card_checklists(card_id, fields=None)
 # due, dueReminder: these params accept only isoformat dates.
 item = client.add_item_to_checklist(checklist_id, name, pos=None, checked=None, due=None, dueReminder=None, idMember=None)
 ```
+### Webhooks
+#### List token webhooks
+```python
+webhooks = client.get_token_webhooks()
+```
+#### Create webhook
+```python
+webhook = client.create_webhook(idModel, callbackURL, description=None, active=True, filter=None)
+```
+#### Delete webhook
+```python
+client.delete_webhook(webhook_id)
+```
