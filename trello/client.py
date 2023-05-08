@@ -10,7 +10,7 @@ class Client(object):
     AUTH_URL = "https://trello.com/1/authorize?"
     headers = {"Content-Type": "application/json", "Accept": "application/json"}
 
-    def __init__(self, api_key=None, token=None):
+    def __init__(self, api_key, token=None):
         self.key = api_key
         self.token = token
 
@@ -37,17 +37,79 @@ class Client(object):
         """
         return self.get("members/me/")
 
-    def get_workspaces(self, member_id):
-        return self.get(f"members/{member_id}/organizations")
+    def get_workspaces(self, member_id, filter: str = None, fields: str = None, paid_account: bool = None):
+        """
+        filter = One of: all, members, none, public (Note: members filters to only private Workspaces) \n
+        fields = all or a comma-separated list of organization fields \n
+        paid_accounts = Whether or not to include paid account information in the returned workspace object
+        """
+        args = locals()
+        params = self.set_request_params(args)
+        return self.get(f"members/{member_id}/organizations", params=params)
 
-    def get_boards(self, workspace_id):
-        return self.get(f"organizations/{workspace_id}/boards")
+    def get_members(self, organization_id):
+        return self.get(f"organizations/{organization_id}/members")
+
+    def get_boards(self, workspace_id, filter: str = None, fields: str = None):
+        """
+        filter = One of: all, members, none, public (Note: members filters to only private Workspaces) \n
+        fields = all or a comma-separated list of organization fields \n
+        """
+        args = locals()
+        params = self.set_request_params(args)
+        return self.get(f"organizations/{workspace_id}/boards", params=params)
+
+    def get_board_lists(self, board_id, cards: str = None, filter: str = None, fields: str = None):
+        """
+        cards = Valid values: all, closed, none, open \n
+        filter = Valid values: all, closed, none, open \n
+        fields = all or a comma-separated list of list fields
+        """
+        args = locals()
+        params = self.set_request_params(args)
+        return self.get(f"boards/{board_id}/lists", params=params)
+
+    def get_board_labels(self, board_id, limit: int = None):
+        """
+        limit = default: 5, maximum: 1000
+        """
+        args = locals()
+        params = self.set_request_params(args)
+        return self.get(f"boards/{board_id}/labels", params=params)
 
     def get_cards(self, board_id):
         return self.get(f"boards/{board_id}/cards")
 
-    def get_card_actions(self, card_id, action_type):
-        params = {"filter": action_type}
+    def create_card(
+        self,
+        idList,
+        name: str = None,
+        desc: str = None,
+        pos: str = None,
+        due: str = None,
+        start: str = None,
+        dueComplete: bool = None,
+        idMembers: str = None,
+        idLabels: str = None,
+        urlSource: str = None,
+    ):
+        """
+        due, start: these params accept only isoformat dates.
+        idMembers, idLabels: string with a list of ids separated by commas.
+        """
+        args = locals()
+        params = self.set_request_params(args)
+        return self.post("cards", params=params)
+
+    def get_card_actions(self, card_id, action_type: str=None, page: int=None):
+        """
+        filter = A comma-separated list of action types. Default: commentCard
+        """
+        params = {}
+        if action_type:
+            params.update({"filter": action_type})
+        if page:
+            params.update({"page": page})
         return self.get(f"cards/{card_id}/actions", params=params)
 
     def get(self, endpoint, **kwargs):
@@ -100,3 +162,10 @@ class Client(object):
         if status_code == 500:
             raise Exception
         return r
+
+    def set_request_params(self, args):
+        params = {}
+        for arg in args:
+            if args[arg] is not None and arg != "self":
+                params.update({f"{arg}": args[arg]})
+        return params

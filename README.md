@@ -2,12 +2,87 @@
 # trello-python
 ![](https://img.shields.io/badge/version-0.1.0-success) ![](https://img.shields.io/badge/Python-3.8%20|%203.9%20|%203.10%20|%203.11-4B8BBE?logo=python&logoColor=white)  
 
-*trello-python* is an API wrapper for Trello, written in Python.
+*trello-python* is an API wrapper for Trello, written in Python.  
+This product uses Oauth2 for authentication and notifications using webhooks.
 ## Installing
 ```
 pip install trello-python
 ```
 ## Usage
 ```python
-client = Client()
+from trello.client import Client
+client = Client(api_key, token=None)
 ```
+If you don't have a token, follow this instructions:
+1. **Get authorization URL to obtain token**
+```python
+url = client.authorization_url(return_url)
+```
+2. **Set access token**
+```python
+client.set_token(access_token)
+```
+Check more information about Trello Oauth: https://developer.atlassian.com/cloud/trello/guides/rest-api/authorization/
+#### Get current user
+```python
+user = client.get_current_user()
+```
+### Workspaces
+#### - List Workspaces
+```python
+# filter = One of: all, members, none, public (Note: members filters to only private Workspaces)
+# fields = all or a comma-separated list of organization fields
+# paid_accounts = Whether or not to include paid account information in the returned workspace object  
+workspace = client.get_workspaces(member_id, filter=None, fields=None, paid_accounts=None)
+```
+#### - List Workspace Members
+```python
+members = client.get_members(workspace_id)
+```
+#### - List Workspace boards
+```python
+# filter = One of: all, members, none, public (Note: members filters to only private Workspaces) \n
+# fields = all or a comma-separated list of organization fields \n
+boards = client.get_boards(workspace_id, filter=None, fields=None)
+```
+### Boards
+#### - List board cards
+```python
+cards = client.get_cards(board_id)
+```
+#### - List board lists
+```python
+# cards = Valid values: all, closed, none, open  
+# filter = Valid values: all, closed, none, open  
+# fields = all or a comma-separated list of list fields
+lists = client.get_board_lists(board_id)
+```
+#### - List board labels
+```python
+# limit = default: 5, maximum: 1000
+labels = client.get_board_labels(board_id, limit=None)
+```
+### Cards
+#### Create Card
+```python
+# due, start: these params accept only isoformat dates.
+# idMembers, idLabels: string with a list of ids separated by commas.
+card = client.create_card(
+    idList,
+    name=None, 
+    desc=None, 
+    pos=None, 
+    due=None, 
+    start=None, 
+    dueComplete=None, 
+    idMembers=None, 
+    idLabels=None, 
+    urlSource=None
+)
+```
+#### List card actions
+```python
+# action_type = A comma-separated list of action types. Default: commentCard
+actions = client.get_card_actions(card_id, action_type=None, page=None)
+```
+A list of action types here: https://developer.atlassian.com/cloud/trello/guides/rest-api/action-types/
