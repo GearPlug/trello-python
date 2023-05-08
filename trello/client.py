@@ -101,7 +101,15 @@ class Client(object):
         params = self.set_request_params(args)
         return self.post("cards", params=params)
 
-    def get_card_actions(self, card_id, action_type: str=None, page: int=None):
+    def add_label_to_card(self, card_id, label_id):
+        params = {"value": label_id}
+        return self.post(f"cards/{card_id}/idLabels", params=params)
+
+    def add_comment_to_card(self, card_id, comment: str):
+        params = {"text": comment}
+        return self.post(f"cards/{card_id}/actions/comments", params=params)
+
+    def get_card_actions(self, card_id, action_type: str = None, page: int = None):
         """
         filter = A comma-separated list of action types. Default: commentCard
         """
@@ -111,6 +119,29 @@ class Client(object):
         if page:
             params.update({"page": page})
         return self.get(f"cards/{card_id}/actions", params=params)
+
+    def get_card_checklists(self, card_id, fields: str = None):
+        """
+        fields = all or a comma-separated list of: idBoard,idCard,name,pos
+        """
+        params = {}
+        if fields:
+            params.update({"fields": fields})
+        return self.get(f"cards/{card_id}/checklists", params=params)
+
+    def add_item_to_checklist(
+        self,
+        checklist_id,
+        name: str,
+        pos: str = None,
+        checked: bool = None,
+        due: str = None,
+        dueReminder: str = None,
+        idMember: str = None,
+    ):
+        args = locals()
+        params = self.set_request_params(args)
+        return self.post(f"checklists/{checklist_id}/checkItems", params=params)
 
     def get(self, endpoint, **kwargs):
         response = self.request("GET", endpoint, **kwargs)

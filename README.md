@@ -65,6 +65,7 @@ labels = client.get_board_labels(board_id, limit=None)
 ### Cards
 #### Create Card
 ```python
+# pos: The position of the new card. top, bottom, or a positive float
 # due, start: these params accept only isoformat dates.
 # idMembers, idLabels: string with a list of ids separated by commas.
 card = client.create_card(
@@ -80,9 +81,29 @@ card = client.create_card(
     urlSource=None
 )
 ```
+### Add label to card
+```python
+label = client.add_label_to_card(card_id, label_id)
+```
+### Add comment to card
+```python
+comment = client.add_comment_to_card(card_id, comment_text)
+```
 #### List card actions
 ```python
 # action_type = A comma-separated list of action types. Default: commentCard
 actions = client.get_card_actions(card_id, action_type=None, page=None)
 ```
 A list of action types here: https://developer.atlassian.com/cloud/trello/guides/rest-api/action-types/
+#### List card checklists
+```python
+# fields = all or a comma-separated list of: idBoard,idCard,name,pos
+checklists = client.get_card_checklists(card_id, fields=None)
+```
+### Checklists
+#### Add item to checklist
+```python
+# pos = The position of the check item in the checklist. One of: top, bottom, or a positive number.
+# due, dueReminder: these params accept only isoformat dates.
+item = client.add_item_to_checklist(checklist_id, name, pos=None, checked=None, due=None, dueReminder=None, idMember=None)
+```
