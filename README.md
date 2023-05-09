@@ -59,8 +59,13 @@ lists = client.get_board_lists(board_id, cards=None, filter=None, fields=None)
 ```
 #### - List board labels
 ```python
-# limit = default: 5, maximum: 1000
+# limit = default: 50, maximum: 1000
 labels = client.get_board_labels(board_id, limit=None)
+```
+#### - Create label
+```python
+# color = Valid values: yellow, purple, blue, red, green, orange, black, sky, pink, lime
+label = client.create_label(board_id, name, color=None)
 ```
 ### Cards
 #### - Create Card
@@ -119,4 +124,10 @@ webhook = client.create_webhook(idModel, callbackURL, description=None, active=T
 #### Delete webhook
 ```python
 client.delete_webhook(webhook_id)
+```
+### Search
+```python
+# modelTypes = all or a comma-separated list of: actions, boards, cards, members, organizations. Default all.
+# partial = true means that it will look for content that starts with any of the words in your query
+search = client.search(query, modelTypes=None, partial=None)
 ```
