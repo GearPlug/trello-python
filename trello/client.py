@@ -82,8 +82,11 @@ class Client(object):
         params = self.set_request_params(args)
         return self.get(f"boards/{board_id}/labels", params=params)
 
-    def get_cards(self, board_id):
-        return self.get(f"boards/{board_id}/cards")
+    def get_cards(self, board_id, limit=None):
+        params = {}
+        if limit:
+            params.update(limit=limit)
+        return self.get(f"boards/{board_id}/cards", params=params)
 
     def create_card(
         self,
@@ -151,7 +154,7 @@ class Client(object):
         params = self.set_request_params(args)
         return self.post(f"checklists/{checklist_id}/checkItems", params=params)
 
-    def create_label(self, board_id, name, color:str = None):
+    def create_label(self, board_id, name, color: str = None):
         params = {"idBoard": board_id, "name": name}
         if color:
             params.update(color=color)
@@ -160,7 +163,7 @@ class Client(object):
     def get_token_webhooks(self):
         return self.get(f"tokens/{self.token}/webhooks")
 
-    def create_webhook(self, idModel: str, callbackURL: str, description: str = None, active:bool =True, filter=None):
+    def create_webhook(self, idModel: str, callbackURL: str, description: str = None, active: bool = True, filter=None):
         args = locals()
         params = self.set_request_params(args)
         return self.post(f"webhooks/", params=params)
@@ -168,7 +171,7 @@ class Client(object):
     def delete_webhook(self, webhook_id):
         return self.delete(f"webhooks/{webhook_id}")
 
-    def search(self, query, modelTypes:str = None, partial = None):
+    def search(self, query, modelTypes: str = None, partial=None):
         args = locals()
         params = self.set_request_params(args)
         return self.get(f"search/", params=params)

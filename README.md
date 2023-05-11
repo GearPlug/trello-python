@@ -52,7 +52,8 @@ board = client.get_board(board_id)
 ```
 #### - List board cards
 ```python
-cards = client.get_cards(board_id)
+# limit = maximum: 1000
+cards = client.get_cards(board_id, limit=None)
 ```
 #### - List board lists
 ```python
