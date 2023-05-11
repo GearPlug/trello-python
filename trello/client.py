@@ -59,6 +59,11 @@ class Client(object):
         params = self.set_request_params(args)
         return self.get(f"organizations/{workspace_id}/boards", params=params)
 
+    def get_board(self, board_id, fields="all", lists=None):
+        args = locals()
+        params = self.set_request_params(args)
+        return self.get(f"boards/{board_id}", params=params)
+
     def get_board_lists(self, board_id, cards: str = None, filter: str = None, fields: str = None):
         """
         cards = Valid values: all, closed, none, open \n
@@ -108,6 +113,9 @@ class Client(object):
     def add_comment_to_card(self, card_id, comment: str):
         params = {"text": comment}
         return self.post(f"cards/{card_id}/actions/comments", params=params)
+
+    def get_card_customfields(self, card_id):
+        return self.get(f"cards/{card_id}/customFieldItems")
 
     def get_card_actions(self, card_id, action_type: str = None, page: int = None):
         """
@@ -164,6 +172,9 @@ class Client(object):
         args = locals()
         params = self.set_request_params(args)
         return self.get(f"search/", params=params)
+
+    def get_customfield(self, customfield_id):
+        return self.get(f"customFields/{customfield_id}")
 
     def get(self, endpoint, **kwargs):
         response = self.request("GET", endpoint, **kwargs)

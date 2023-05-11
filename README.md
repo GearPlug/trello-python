@@ -46,6 +46,10 @@ members = client.get_members(workspace_id)
 boards = client.get_boards(workspace_id, filter=None, fields=None)
 ```
 ### Boards
+#### Get board
+```python
+board = client.get_board(board_id)
+```
 #### - List board cards
 ```python
 cards = client.get_cards(board_id)
@@ -104,6 +108,14 @@ A list of action types here: https://developer.atlassian.com/cloud/trello/guides
 ```python
 # fields = all or a comma-separated list of: idBoard,idCard,name,pos
 checklists = client.get_card_checklists(card_id, fields=None)
+```
+#### - List card custom fields
+```python
+custom_fields = client.get_card_customfields(card_id)
+```
+#### - Get custom field
+```python
+custom_field = client.get_customfield(customfield_id)
 ```
 ### Checklists
 #### - Add item to checklist
