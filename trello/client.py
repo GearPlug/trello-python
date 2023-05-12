@@ -163,7 +163,7 @@ class Client(object):
     def get_token_webhooks(self):
         return self.get(f"tokens/{self.token}/webhooks")
 
-    def create_webhook(self, idModel: str, callbackURL: str, description: str = None, active: bool = True, filter=None):
+    def create_webhook(self, idModel: str, callbackURL: str, description: str = None, active: bool = True):
         args = locals()
         params = self.set_request_params(args)
         return self.post(f"webhooks/", params=params)

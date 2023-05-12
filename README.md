@@ -132,7 +132,7 @@ webhooks = client.get_token_webhooks()
 ```
 #### - Create webhook
 ```python
-webhook = client.create_webhook(idModel, callbackURL, description=None, active=True, filter=None)
+webhook = client.create_webhook(idModel, callbackURL, description=None, active=True)
 ```
 #### Delete webhook
 ```python
